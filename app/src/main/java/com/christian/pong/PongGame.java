@@ -1,6 +1,7 @@
 package com.christian.pong;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
@@ -58,5 +59,41 @@ public class PongGame extends SurfaceView {
         //reset player's score and lives
         mScore = 0;
         mLives = 3;
+    }
+
+    //draw method
+    private void draw(){
+        if(mOurHolder.getSurface().isValid()){
+            mCanvas = mOurHolder.lockCanvas();
+
+            //fill screen with color
+            mCanvas.drawColor(Color.argb(255,255,255,255));
+
+            //color to paint with
+            mPaint.setColor(Color.argb(255,255,255,255));
+
+            //draw bat and ball
+            //choose font size
+            mPaint.setTextSize(mFontSize);
+
+            //draw HUD
+            mCanvas.drawText("Score" + mScore + " Lives: " + mLives, mFontMargin,
+                    mFontSize, mPaint);
+        if(DEBUGGING){
+            printDebuggingText();
+        }
+
+        //display the drawing on screen
+        mOurHolder.unlockCanvasAndPost(mCanvas);
+        }
+    }
+
+    //debugging text
+    private void printDebuggingText(){
+        int debugSize = mFontSize / 2;
+        int debugStart = 150;
+        mPaint.setTextSize(debugSize);
+        mCanvas.drawText("FPS: " + mFPS, 10, debugStart + debugSize, mPaint);
+
     }
 }
