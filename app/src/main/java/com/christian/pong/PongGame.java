@@ -7,7 +7,7 @@ import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.graphics.Canvas;
 
-public class PongGame extends SurfaceView {
+public class PongGame extends SurfaceView implements Runnable{
     //variables ////////////////
     private final boolean DEBUGGING = true;
     //drawing variables
@@ -31,6 +31,12 @@ public class PongGame extends SurfaceView {
     private int mScore;
     private int mLives;
 
+    //thread variables
+    private Thread mGameThread = null;
+    //this can be accessed inside and outsdie the thread
+    private volatile boolean mPlaying;
+    private boolean mPaused = true;
+
     //constructor of PongGame
     public PongGame(Context context, int x, int y){
         super(context);
@@ -52,6 +58,11 @@ public class PongGame extends SurfaceView {
         startNewGame();
     }
 
+    //run method
+    @Override
+    public void run() {
+
+    }
     //starting a new game
     private void startNewGame(){
         //resetting ball to starting position
@@ -96,4 +107,5 @@ public class PongGame extends SurfaceView {
         mCanvas.drawText("FPS: " + mFPS, 10, debugStart + debugSize, mPaint);
 
     }
+
 }
