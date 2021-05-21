@@ -3,6 +3,7 @@ package com.christian.pong;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.graphics.Canvas;
@@ -99,6 +100,28 @@ public class PongGame extends SurfaceView implements Runnable{
         }
     }
 
+    //pause method for when the player quits the game
+    public void pause(){
+        //set mPlaying to false
+        mPlaying = false;
+        try{
+            //stop the thread
+            mGameThread.join();
+        }catch (InterruptedException e ){
+            Log.e("Error", "joining thread");
+        }
+    }
+
+    //resume method, called by pongactivity when the player starts the game
+    public void resume(){
+        mPlaying = true;
+
+        //initialize the instance of the thread
+        mGameThread = new Thread(this);
+
+        //start the thread
+        mGameThread.start();
+    }
     //debugging text
     private void printDebuggingText(){
         int debugSize = mFontSize / 2;
