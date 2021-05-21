@@ -6,6 +6,8 @@ import android.view.Window;
 import android.os.Bundle;
 import android.graphics.Point;
 import android.view.Display;
+import android.view.WindowManager;
+
 
 public class PongActivity extends Activity {
     private PongGame mPongGame;
@@ -13,6 +15,7 @@ public class PongActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         Display display = getWindowManager().getDefaultDisplay();
@@ -24,6 +27,14 @@ public class PongActivity extends Activity {
 
     @Override
     protected void onPause(){
+
         super.onPause();
+
+        mPongGame.pause();
+    }
+
+    @Override
+    protected void onResume(){
+        mPongGame.resume();
     }
 }
