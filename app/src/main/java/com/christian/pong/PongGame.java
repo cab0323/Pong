@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.graphics.Canvas;
@@ -58,6 +59,7 @@ public class PongGame extends SurfaceView implements Runnable{
 
         //initialize the bat and ball
         mBall = new Ball(mScreenX);
+        mBat = new Bat(mScreenX, mScreenY);
 
         //start the game
         startNewGame();
@@ -92,6 +94,7 @@ public class PongGame extends SurfaceView implements Runnable{
     private void update(){
         //update the ball
         mBall.update(mFPS);
+        mBat.update(mFPS);
     }
 
     //detect collision method
@@ -121,6 +124,7 @@ public class PongGame extends SurfaceView implements Runnable{
 
             //draw bat and ball
             mCanvas.drawRect(mBall.getRect(), mPaint);
+            mCanvas.drawRect(mBat.getRect(), mPaint);
 
             //choose font size
             mPaint.setTextSize(mFontSize);
@@ -168,4 +172,29 @@ public class PongGame extends SurfaceView implements Runnable{
 
     }
 
+    //handle all the screen touches
+    public boolean onTouchEvent(MotionEvent motionEvent){
+        switch (motionEvent.getAction() & MotionEvent.ACTION_MASK){
+            //player has put finger on screen
+            case MotionEvent.ACTION_DOWN:
+                //if game was paused, then unpause
+                mPaused = false;
+                //find where touch happened
+                if(motionEvent.getX() > mScreenX / 2){
+                    //touch was on the right
+                    mBat.setMovementState(mBat.RIGHT);
+                }
+                else {
+                    //touch was on the left
+                    mBat.setMovementState(mBat.LEFT);
+                }
+                break;
+            //player lifted finger from screen
+            case MotionEvent.ACTION_UP:
+                //stop the bat moving
+                mBat.setMovementState(mBat.STOPPED);
+                break;
+        }
+        return true;
+    }
 }
