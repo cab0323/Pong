@@ -56,6 +56,9 @@ public class PongGame extends SurfaceView implements Runnable{
         mOurHolder = getHolder();
         mPaint = new Paint();
 
+        //initialize the bat and ball
+        mBall = new Ball(mScreenX);
+
         //start the game
         startNewGame();
     }
@@ -87,7 +90,8 @@ public class PongGame extends SurfaceView implements Runnable{
 
     //update method
     private void update(){
-        //update vall and bat
+        //update the ball
+        mBall.update(mFPS);
     }
 
     //detect collision method
@@ -97,6 +101,7 @@ public class PongGame extends SurfaceView implements Runnable{
     //starting a new game
     private void startNewGame(){
         //resetting ball to starting position
+        mBall.reset(mScreenX, mScreenY);
 
         //reset player's score and lives
         mScore = 0;
@@ -115,6 +120,8 @@ public class PongGame extends SurfaceView implements Runnable{
             mPaint.setColor(Color.argb(255,255,255,255));
 
             //draw bat and ball
+            mCanvas.drawRect(mBall.getRect(), mPaint);
+
             //choose font size
             mPaint.setTextSize(mFontSize);
 
