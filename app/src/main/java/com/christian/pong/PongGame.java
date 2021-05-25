@@ -10,6 +10,7 @@ import android.graphics.Canvas;
 
 public class PongGame extends SurfaceView implements Runnable{
     //variables ////////////////
+    //debugging variable
     private final boolean DEBUGGING = true;
     //drawing variables
     private SurfaceHolder mOurHolder;
@@ -34,7 +35,7 @@ public class PongGame extends SurfaceView implements Runnable{
 
     //thread variables
     private Thread mGameThread = null;
-    //this can be accessed inside and outsdie the thread
+    //this can be accessed inside and outside the thread
     private volatile boolean mPlaying;
     private boolean mPaused = true;
 
@@ -108,7 +109,7 @@ public class PongGame extends SurfaceView implements Runnable{
             mCanvas = mOurHolder.lockCanvas();
 
             //fill screen with color
-            mCanvas.drawColor(Color.argb(255,255,255,255));
+            mCanvas.drawColor(Color.argb(255,26,128,182));
 
             //color to paint with
             mPaint.setColor(Color.argb(255,255,255,255));

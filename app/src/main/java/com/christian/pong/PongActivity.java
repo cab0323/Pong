@@ -21,6 +21,7 @@ public class PongActivity extends Activity {
         Display display = getWindowManager().getDefaultDisplay();
         Point size = new Point();
         display.getSize(size);
+
         mPongGame = new PongGame(this, size.x, size.y);
         setContentView(mPongGame);
     }
@@ -35,6 +36,8 @@ public class PongActivity extends Activity {
 
     @Override
     protected void onResume(){
+        super.onResume();
+
         mPongGame.resume();
     }
 }
