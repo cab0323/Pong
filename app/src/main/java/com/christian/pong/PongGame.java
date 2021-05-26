@@ -3,6 +3,7 @@ package com.christian.pong;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.RectF;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
@@ -99,7 +100,34 @@ public class PongGame extends SurfaceView implements Runnable{
 
     //detect collision method
     private void detectCollisions(){
-
+        //did bat hit the ball
+        if(RectF.intersects(mBat.getRect(), mBall.getRect())){
+            //bounce
+            mBall.batBounce(mBat.getRect());
+            mBall.increaseVelocity();
+            mScore++;
+        }
+        //bottom
+        if(mBall.getRect().bottom > mScreenY){
+            mBall.reverseYVelocity();
+            mLives--;
+            if(mLives == 0){
+                mPaused = true;
+                startNewGame();
+            }
+        }
+        //top
+        if(mBall.getRect().top < 0){
+            mBall.reverseYVelocity();
+        }
+        //left
+        if(mBall.getRect().left < 0){
+            mBall.reverseXVelocity();
+        }
+        //right
+        if(mBall.getRect().right > mScreenX){
+            mBall.reverseXVelocity();
+        }
     }
     //starting a new game
     private void startNewGame(){
@@ -130,7 +158,7 @@ public class PongGame extends SurfaceView implements Runnable{
             mPaint.setTextSize(mFontSize);
 
             //draw HUD
-            mCanvas.drawText("Score" + mScore + " Lives: " + mLives, mFontMargin,
+            mCanvas.drawText("Score: " + mScore + " Lives: " + mLives, mFontMargin,
                     mFontSize, mPaint);
         if(DEBUGGING){
             printDebuggingText();
