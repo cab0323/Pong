@@ -12,6 +12,11 @@ public class Ball {
 
 
     //constructor
+
+    /**
+     *
+     * @pre screenX > 0
+     */
     public Ball(int screenX){
         mBallWidth = screenX / 100;
         mBallHeight = screenX / 100;
@@ -20,6 +25,11 @@ public class Ball {
     }
 
     //getter method
+
+    /**
+     *
+     * @postcondition return mRect;
+     */
     RectF getRect(){
         return mRect;
     }
@@ -62,6 +72,12 @@ public class Ball {
     }
 
     //bounce the bat according to where it hit bat
+
+    /**
+     *
+     * @pre batPosition
+     * @post (YVelocity > 0);
+     */
     void batBounce(RectF  batPosition){
         //find center of bat
         float batCenter = batPosition.left + (batPosition.width() / 2);

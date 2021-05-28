@@ -31,6 +31,7 @@ public class PongGame extends SurfaceView implements Runnable{
     //game objects
     private Bat mBat;
     private Ball mBall;
+    private Obstacle mObstacle;
     //score and lives remaining
     private int mScore;
     private int mLives;
@@ -42,6 +43,12 @@ public class PongGame extends SurfaceView implements Runnable{
     private boolean mPaused = true;
 
     //constructor of PongGame
+    /**
+     *
+     * @pre (x > 0 && y > 0)
+     * @post x
+     * @param y
+     */
     public PongGame(Context context, int x, int y){
         super(context);
 
@@ -61,6 +68,7 @@ public class PongGame extends SurfaceView implements Runnable{
         //initialize the bat and ball
         mBall = new Ball(mScreenX);
         mBat = new Bat(mScreenX, mScreenY);
+        mObstacle = new Obstacle(mScreenX, mScreenY);
 
         //start the game
         startNewGame();
@@ -76,7 +84,7 @@ public class PongGame extends SurfaceView implements Runnable{
             if(!mPaused){
                 update();
                 //this will get bat and ball to new positions
-                //check if any collisions have occured
+                //check if any collisions have occurred
                 detectCollisions();
             }
 
@@ -96,6 +104,7 @@ public class PongGame extends SurfaceView implements Runnable{
         //update the ball
         mBall.update(mFPS);
         mBat.update(mFPS);
+        mObstacle.update(mFPS);
     }
 
     //detect collision method
@@ -106,6 +115,12 @@ public class PongGame extends SurfaceView implements Runnable{
             mBall.batBounce(mBat.getRect());
             mBall.increaseVelocity();
             mScore++;
+        }
+        //did obstacle hit ball
+        if(RectF.intersects(mObstacle.getRect(), mBall.getRect())){
+            //bounce the ball
+            mBall.batBounce(mObstacle.getRect());
+           // mBall.increaseVelocity();
         }
         //bottom
         if(mBall.getRect().bottom > mScreenY){
@@ -124,15 +139,24 @@ public class PongGame extends SurfaceView implements Runnable{
         if(mBall.getRect().left < 0){
             mBall.reverseXVelocity();
         }
+        if(mObstacle.getRect().left < 0){
+            mObstacle.bounce();
+        }
         //right
         if(mBall.getRect().right > mScreenX){
             mBall.reverseXVelocity();
+        }
+        if(mObstacle.getRect().right > mScreenX){
+            mObstacle.bounce();
         }
     }
     //starting a new game
     private void startNewGame(){
         //resetting ball to starting position
         mBall.reset(mScreenX, mScreenY);
+
+        //reset the obstacle position
+        mObstacle.reset(mScreenX);
 
         //reset player's score and lives
         mScore = 0;
@@ -150,9 +174,10 @@ public class PongGame extends SurfaceView implements Runnable{
             //color to paint with
             mPaint.setColor(Color.argb(255,255,255,255));
 
-            //draw bat and ball
+            //draw bat, ball, and obstacle
             mCanvas.drawRect(mBall.getRect(), mPaint);
             mCanvas.drawRect(mBat.getRect(), mPaint);
+            mCanvas.drawRect(mObstacle.getRect(), mPaint);
 
             //choose font size
             mPaint.setTextSize(mFontSize);
